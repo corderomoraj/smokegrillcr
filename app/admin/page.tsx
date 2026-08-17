@@ -5,6 +5,10 @@ import useProducts from '../../hooks/useProducts';
 import { Product } from '../../types/product';
 import { Save, AlertCircle } from 'lucide-react';
 
+// Workaround: relax framer-motion typings for intrinsic HTML props (className, etc.).
+// This keeps runtime behavior and avoids the TypeScript error Vercel reported.
+const M = motion as any;
+
 export default function AdminPage() {
   const { products, setProducts } = useProducts();
   const [local, setLocal] = useState<Product[]>([]);
@@ -26,25 +30,25 @@ export default function AdminPage() {
 
   return (
     <div className="container mx-auto px-4 py-12">
-      <motion.div
+      <M.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         className="mb-8"
       >
         <h1 className="text-4xl font-bold text-smokeWhite mb-2">Administrador</h1>
         <p className="text-zinc-400">Gestiona precios y stock de productos</p>
-      </motion.div>
+      </M.div>
 
-      <motion.div 
+      <M.div 
         className="bg-gradient-to-r from-blue-900/20 to-blue-900/10 border border-blue-800/50 rounded-lg p-4 mb-6 flex gap-3"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
       >
         <AlertCircle className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
         <p className="text-sm text-blue-300">Esta interfaz no tiene autenticación. En producción, deberías protegerla con login.</p>
-      </motion.div>
+      </M.div>
 
-      <motion.div 
+      <M.div 
         className="bg-gradient-to-br from-zinc-900 to-zinc-950 rounded-xl border border-zinc-800 overflow-hidden"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -61,7 +65,7 @@ export default function AdminPage() {
             </thead>
             <tbody className="divide-y divide-zinc-800">
               {local.map((p) => (
-                <motion.tr 
+                <M.tr 
                   key={p.id} 
                   className="hover:bg-zinc-800/30 transition-colors"
                   initial={{ opacity: 0 }}
@@ -87,19 +91,19 @@ export default function AdminPage() {
                   <td className="px-6 py-4">
                     <span className="inline-block px-3 py-1 bg-zinc-800 text-zinc-400 text-sm rounded-lg">Editable</span>
                   </td>
-                </motion.tr>
+                </M.tr>
               ))}
             </tbody>
           </table>
         </div>
-      </motion.div>
+      </M.div>
 
-      <motion.div 
+      <M.div 
         className="mt-8 flex gap-4"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
       >
-        <motion.button 
+        <M.button 
           onClick={saveChanges} 
           className="px-6 py-3 bg-gradient-to-r from-brandRed to-red-700 text-white rounded-lg font-semibold hover:shadow-lg hover:shadow-brandRed/50 transition-all flex items-center gap-2"
           whileHover={{ scale: 1.02 }}
@@ -107,19 +111,19 @@ export default function AdminPage() {
         >
           <Save className="w-5 h-5" />
           Guardar cambios
-        </motion.button>
+        </M.button>
         
         {saved && (
-          <motion.div 
+          <M.div 
             className="px-6 py-3 bg-green-900/30 border border-green-800 text-green-300 rounded-lg font-semibold flex items-center gap-2"
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -10 }}
           >
             ✓ Cambios guardados exitosamente
-          </motion.div>
+          </M.div>
         )}
-      </motion.div>
+      </M.div>
     </div>
   );
 }
